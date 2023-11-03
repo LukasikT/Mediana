@@ -21,10 +21,11 @@ const expenses = {
     "2023-04": {}
 };
 
-function get_median_of_first_week_expenses(expenses){
+
 const firstWeekMonthExpenses = {};
 const medianFirstWeekMonth = {};
 
+function get_median_of_first_week_expenses(){
 for (const month in expenses){    
     if (Object.keys(expenses[month]).length === 0) {
         firstWeekMonthExpenses[`${month}`] = `Brak danych!`;
@@ -73,10 +74,14 @@ for (const exp in firstWeekMonthExpenses){
     
 }
 
-console.log(firstWeekMonthExpenses);
-console.log(medianFirstWeekMonth);
-
+    for (const date in medianFirstWeekMonth){
+        const para2 = document.createElement("p");
+        para2.textContent = `${date} = ${medianFirstWeekMonth[date]}`;
+        document.body.appendChild(para2);
+    }
 }
 
-get_median_of_first_week_expenses(expenses);
 
+const btn = document.getElementById("calc");
+
+btn.addEventListener("click", get_median_of_first_week_expenses);
