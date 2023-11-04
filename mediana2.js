@@ -1,4 +1,4 @@
-const expenses = {
+let expenses = {
     "2023-01": {
         "01": {
             "food": [ 22.11, 43, 11.72, 2.2, 36.29, 2.5, 19 ],
@@ -21,10 +21,11 @@ const expenses = {
     "2023-04": {}
 };
 
-function get_median_of_first_week_expenses(expenses){
+
 const firstWeekMonthExpenses = {};
 const medianFirstWeekMonth = {};
 
+function get_median_of_first_week_expenses(){
 for (const month in expenses){    
     if (Object.keys(expenses[month]).length === 0) {
         firstWeekMonthExpenses[`${month}`] = `Brak danych!`;
@@ -73,10 +74,70 @@ for (const exp in firstWeekMonthExpenses){
     
 }
 
-console.log(firstWeekMonthExpenses);
-console.log(medianFirstWeekMonth);
-
+    for (const date in medianFirstWeekMonth){
+        const para2 = document.createElement("p");
+        para2.textContent = `${date} = ${medianFirstWeekMonth[date]}`;
+        document.body.appendChild(para2);
+    }
 }
 
-get_median_of_first_week_expenses(expenses);
 
+const btn = document.getElementById("calc");
+
+btn.addEventListener("click", get_median_of_first_week_expenses);
+
+
+function addExp(){
+    const obj = {};
+
+    const date = document.getElementById("date").value;
+    const category = document.getElementById("category").value.toLowerCase();
+    const exp = document.getElementById("exp").value;
+    const yearMonth = date.substring(0, 7);
+    const day = date.toString().substring(8, 10);
+
+obj[yearMonth] = {
+    [day]: {
+        [category]: [Number(exp)]
+    }
+};
+
+const checkYearMonth = [];
+const checkDay = [];
+const checkCategory = [];
+
+const yMTab = Object.keys(expenses);
+const dayTab = Object.keys(expenses[yearMonth]);
+const categoryTab = Object.keys(expenses[yearMonth][day]);
+
+yMTab.map((x) => x == yearMonth ? checkYearMonth.push("year and month exist") : NaN);
+    console.log(checkYearMonth);
+
+dayTab.map((x) => x == day ? checkDay.push("day exist") : NaN);
+    console.log(checkDay);
+
+categoryTab.map((x) => x == category ? checkCategory.push("category exist") : NaN);
+    console.log(checkCategory);
+
+
+
+    if(checkYearMonth == 'year and month exist' && checkDay == "day exist" && checkCategory == "category exist"){
+        expenses[yearMonth][day][category].push(Number(exp));
+    } else if(checkYearMonth == 'year and month exist' && checkDay == "day exist"){
+        expenses[yearMonth][day] = Object.assign(expenses[yearMonth][day], obj[yearMonth][day]);
+    } else if(checkYearMonth == 'year and month exist'){
+        expenses[yearMonth] = Object.assign(expenses[yearMonth], obj[yearMonth]);
+    }else{console.log('chuj wam w dupę!')}
+
+
+
+//expenses = Object.assign(expenses, obj); 
+
+
+
+
+
+console.log(expenses);
+};
+
+console.log(expenses);
