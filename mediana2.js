@@ -102,42 +102,35 @@ obj[yearMonth] = {
     }
 };
 
-const checkYearMonth = [];
-const checkDay = [];
-const checkCategory = [];
+const check = [];
 
-const yMTab = Object.keys(expenses);
-const dayTab = Object.keys(expenses[yearMonth]);
-const categoryTab = Object.keys(expenses[yearMonth][day]);
-
-yMTab.map((x) => x == yearMonth ? checkYearMonth.push("year and month exist") : NaN);
-    console.log(checkYearMonth);
-
-dayTab.map((x) => x == day ? checkDay.push("day exist") : NaN);
-    console.log(checkDay);
-
-categoryTab.map((x) => x == category ? checkCategory.push("category exist") : NaN);
-    console.log(checkCategory);
-
-
-
-    if(checkYearMonth == 'year and month exist' && checkDay == "day exist" && checkCategory == "category exist"){
-        expenses[yearMonth][day][category].push(Number(exp));
-    } else if(checkYearMonth == 'year and month exist' && checkDay == "day exist"){
-        expenses[yearMonth][day] = Object.assign(expenses[yearMonth][day], obj[yearMonth][day]);
-    } else if(checkYearMonth == 'year and month exist'){
-        expenses[yearMonth] = Object.assign(expenses[yearMonth], obj[yearMonth]);
-    }else{console.log('chuj wam w dupę!')}
-
-
-
-//expenses = Object.assign(expenses, obj); 
+    for(const yM in expenses){
+        if (yM == yearMonth){
+            check.push('y-m');
+        }
+        for(const d in expenses[yM]){
+            if (yM == yearMonth & d == day){
+                check.push('y-m, d');
+                }
+            for(const cat in expenses[yM][d]){ 
+                if (yM == yearMonth & d == day & cat == category){
+                    check.push('y-m, d, cat');
+                }
+            }
+        }
+    }
+if(check.length == 3){
+    expenses[yearMonth][day][category].push(Number(exp));
+} else if (check.length == 2){
+    expenses[yearMonth][day] = Object.assign(expenses[yearMonth][day], obj[yearMonth][day]);
+} else if (check.length == 1){
+    expenses[yearMonth] = Object.assign(expenses[yearMonth], obj[yearMonth]);
+} else{
+    expenses = Object.assign(expenses, obj);
+}
 
 
 
-
-
+//console.log(check.length);
 console.log(expenses);
 };
-
-console.log(expenses);
