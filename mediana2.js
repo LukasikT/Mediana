@@ -1,4 +1,4 @@
-const expenses = {
+let expenses = {
     "2023-01": {
         "01": {
             "food": [ 22.11, 43, 11.72, 2.2, 36.29, 2.5, 19 ],
@@ -20,11 +20,56 @@ const expenses = {
     },
     "2023-04": {}
 };
+function addExp(){
+    const obj = {};
 
-function get_median_of_first_week_expenses(expenses){
+    const date = document.getElementById("date").value;
+    const category = document.getElementById("category").value.toLowerCase();
+    const exp = document.getElementById("exp").value;
+    const yearMonth = date.substring(0, 7);
+    const day = date.toString().substring(8, 10);
+
+obj[yearMonth] = {
+    [day]: {
+        [category]: [Number(exp)]
+    }
+};
+
+const check = [];
+
+    for(const yM in expenses){
+        if (yM == yearMonth){
+            check.push('y-m');
+        }
+        for(const d in expenses[yM]){
+            if (yM == yearMonth & d == day){
+                check.push('y-m, d');
+                }
+            for(const cat in expenses[yM][d]){ 
+                if (yM == yearMonth & d == day & cat == category){
+                    check.push('y-m, d, cat');
+                }
+            }
+        }
+    }
+if(check.length == 3){
+    expenses[yearMonth][day][category].push(Number(exp));
+} else if (check.length == 2){
+    expenses[yearMonth][day] = Object.assign(expenses[yearMonth][day], obj[yearMonth][day]);
+} else if (check.length == 1){
+    expenses[yearMonth] = Object.assign(expenses[yearMonth], obj[yearMonth]);
+} else{
+    expenses = Object.assign(expenses, obj);
+}
+
+//console.log(check.length);
+console.log(expenses);
+};
+
 const firstWeekMonthExpenses = {};
 const medianFirstWeekMonth = {};
 
+function get_median_of_first_week_expenses(){
 for (const month in expenses){    
     if (Object.keys(expenses[month]).length === 0) {
         firstWeekMonthExpenses[`${month}`] = `Brak danych!`;
@@ -73,10 +118,15 @@ for (const exp in firstWeekMonthExpenses){
     
 }
 
-console.log(firstWeekMonthExpenses);
-console.log(medianFirstWeekMonth);
-
+    for (const date in medianFirstWeekMonth){
+        const para2 = document.createElement("p");
+        para2.textContent = `${date} = ${medianFirstWeekMonth[date]}`;
+        document.body.appendChild(para2);
+    }
 }
 
-get_median_of_first_week_expenses(expenses);
+const btn = document.getElementById("calc");
+btn.addEventListener("click", get_median_of_first_week_expenses);
+
+
 
